@@ -1,4 +1,5 @@
 import Array "mo:base/Array";
+import Buffer "mo:base/Buffer";
 actor {
   func quicksort(arr : [Int]) : [Int] {
     let length = arr.size();
@@ -9,7 +10,11 @@ actor {
     let left : [Int] = Array.filter<Int>(arrPivot, func x = x < pivot);
     let right : [Int] = Array.filter<Int>(arrPivot, func x = x >= pivot);
 
-    Array.append<Int>(Array.append<Int>(quicksort(left), [pivot]), quicksort(right));
+    let buf = Buffer.fromArray<Int>(quicksort(left));
+    buf.add(pivot);
+    buf.append(Buffer.fromArray<Int>(quicksort(right)));
+
+    Buffer.toArray(buf);
   };
 
   public query func qsort(arr : [Int]) : async [Int] {

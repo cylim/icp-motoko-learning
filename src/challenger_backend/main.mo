@@ -1,6 +1,39 @@
 import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
-actor {
+import Text "mo:base/Text";
+import Nat "mo:base/Nat";
+import Http "Http";
+
+actor Counter {
+  //
+  // Lesson 3
+  //
+  stable var counter = 0;
+
+  public query func get() : async Nat {
+    return counter;
+  };
+
+  public func set(n : Nat) : async () {
+    counter := n;
+  };
+
+  public func inc() : async () {
+    counter += 1;
+  };
+
+  public query func http_request(req: Http.HttpRequest) : async Http.HttpResponse {
+    {
+      body = Text.encodeUtf8("<h1>" # Nat.toText(counter) # "</h1>");
+      headers = [];
+      status_code = 200;
+    }
+  };
+
+
+  //
+  // Lesson 2
+  //
   func quicksort(arr : [Int]) : [Int] {
     let length = arr.size();
     if (length <= 1) { return arr };
@@ -21,9 +54,10 @@ actor {
     quicksort(arr);
   };
 
+  //
+  // Lesson 1
+  //
   public query func greet(name : Text) : async Text {
     return "Hello, " # name # "!";
   };
-
- 
 };
